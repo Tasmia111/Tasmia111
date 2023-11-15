@@ -1,0 +1,300 @@
+#include<iostream>
+using namespace std;
+
+// Node class
+class Node {
+public:
+    int val;
+    Node* next;
+
+    // Constructor
+    Node(int data) {
+        val = data;
+        next = NULL;
+    }
+};
+
+// Function to insert at the beginning
+void insertHead(Node*& head, int val) {
+	//Imitiliaze a pointer to traverse link list and insert value in new node
+    Node* newNode = new Node(val);
+    newNode->next = head;
+    //New node value is equal to head node
+    head = newNode;
+}
+
+// Function to display or traverse the linked list
+void display(Node* head) {
+	//Initialize a temporary pointer 
+    Node* temp = head;
+    //Check the condition if temp is empty or not
+    while (temp != NULL) {
+        cout << temp->val << "->";
+        //Initializing value of temp from next node
+        temp = temp->next;
+    }
+    cout << "NULL" << endl;
+}
+
+// Function to insert at the end
+void insertEnd(Node*& head, int val) {
+	//Initialize a pointer to traverse the link list
+    Node* newNode = new Node(val);
+    //Check the condition For null value of head
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+    //Initialize a pointer 
+    Node* current = head;
+    //Check the condition for current value
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = newNode;
+}
+
+// Function to insert at any nth position
+void insertAtPosition(Node*& head, int val, int pos) {
+    if (pos == 0) {
+        //Call inserted function to insert in beginning
+        insertHead(head, val);
+        return;
+    }
+    //Create a new node with given value
+    Node* newNode = new Node(val);
+    //Initialize a temporary pointer to traverse the link list
+    Node* temp = head;
+    //Initialize a variable for current position
+    int currentPos = 0;
+    //Traverse the link list to position before the desired position
+    while (currentPos != pos - 1 && temp != NULL) {
+        temp = temp->next;
+        currentPos++;
+    }
+    //Check if traversal was success ful(temp is not full)
+    if (temp != NULL) {
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+}
+
+// Search function
+bool search(Node* head, int target) {
+	//Initialize a pointer to traverse the link list
+    Node* current = head;
+    while (current !=NULL) {
+        //Check if value of current node matches the link list
+        if (current->val == target)
+            return true;
+        //Move to the next node
+        current = current->next;
+    }
+    return false;
+}
+
+// Update at any nth position
+void updateNode(Node* head, int val, int pos) {
+	//Initialize the pointer to traverse the link list
+    Node* current = head;
+    //Initialize the variable for current position
+    int currentPos = 0;
+    //Traverse the link list to specified position
+    while (current != NULL && currentPos != pos) {
+        current = current->next;
+        currentPos++;
+    }
+    //Check if traversal is successful
+    if (current != NULL) {
+    //Update the value of node
+        current->val = val;
+        cout << "Node at position " << pos << " updated successfully!" << endl;
+    } else {
+        cout << "Invalid position to update." << endl;
+    }
+}
+
+// Insert at any nth position
+void insertNode(Node*& head, int val, int pos) {
+	//Create a new node with given value
+    Node* newNode = new Node(val);
+    //Check if the position is at beginning (0)
+    if (pos == 0) {
+        newNode->next = head;
+        head = newNode;
+    } else {
+        Node* current = head;
+        int currentPos = 0;
+    //Traverse the link list to position before the desired position
+        while (current != NULL&& currentPos != pos - 1) {
+            current = current->next;
+            currentPos++;
+        }
+    //Check if traversal was successful(not null)
+        if (current != NULL) {
+            newNode->next = current->next;
+            current->next = newNode;
+        }
+    }
+}
+
+// Delete from the beginning
+void deleteFromBeginning(Node*& head) {
+	//Check if link list is empty
+    if (head != NULL) {
+    //Initialize poiinter for tranversal of link list
+        Node* temp = head;
+        head = head->next;
+    //Delete the node
+        delete temp;
+    //Add a msg for succeccfully delete of node from beginning
+        cout << "Node deleted from the beginning successfully!" << endl;
+    } else {
+        cout << "Linked list is empty. Unable to delete." << endl;
+    }
+}
+
+// Delete from end
+void deleteFromEnd(Node*& head) {
+	//Check if the link list is empty
+    if (head == NULL) {
+        cout << "Linked list is empty. Unable to delete." << endl;
+        return;
+    }
+    //Check if there's only one node in link list
+    if (head->next == NULL) {
+    //Delete the only node and update the head
+        delete head;
+        head = NULL;
+        cout << "Node deleted from the end successfully!" << endl;
+        return;
+    }
+    //Initialize the pointer
+    Node* current = head;
+    Node* prev = NULL;
+    //Traverse the link list to last node
+    while (current->next != NULL) {
+        prev = current;
+        current = current->next;
+    }
+    //Update the previous node
+    if (prev != NULL) {
+        prev->next = NULL;
+    //Delete the last node
+        delete current;
+    }
+}
+
+// Delete from any nth position
+void deleteFromNthPosition(Node*& head, int position) {
+	//Check if the link list is empty
+    if (head == NULL) {
+        cout << "Linked list is empty. Unable to delete." << endl;
+        return;
+    }
+    //Check if the position is the beginning(0)
+    if (position == 0) {
+    //Update the head node	
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        cout << "Node deleted from position " << position << " successfully!" << endl;
+        return;
+    }
+    //Initialize pointers for traversal of previous node
+    Node* current = head;
+    Node* prev = NULL;
+    int count = 0;
+    //Traverse the linked list to the specified position
+    while (current != NULL && count < position) {
+        prev = current;
+        current = current->next;
+        count++;
+    }
+    //Check if the position is within the length of link list
+    if (current != NULL) {
+        prev->next = current->next;
+        //Delete the current node
+        delete current;
+        cout << "Node deleted from position " << position << " successfully!" << endl;
+    } else {
+        cout << "Position " << position << " exceeds the length of the linked list." << endl;
+    }
+}
+
+// Search and update at any point
+void searchAndUpdate(Node* head, int searchValue, int updateValue) {
+	//check if the link list is empty
+    if (head == NULL) {
+        cout << "Linked list is empty. Unable to search and update." << endl;
+        return;
+    }
+    //Initialize a pointer to traversed the link list
+    Node* current = head;
+    bool found = false;
+    //Traverse the link list
+    while (current != NULL) {
+    	//Check if current value matches the update value
+        if (current->val == searchValue) {
+        	//Update the value of found node
+            current->val = updateValue;
+            found = true;
+            break;
+        }
+        //Moved to the next node
+        current = current->next;
+    }
+    //Check if the search node was found  
+    if (found) {
+        cout << "Successfully updated the node with value " << searchValue << " to " << updateValue << "." << endl;
+    } else {
+        cout << "Node with value " << searchValue << " not found in the linked list." << endl;
+    }
+}
+
+// Main function
+int main() {
+    Node* head = NULL;
+    
+    //Example usage of link list operations
+    //Insert a node with value 1 at end
+    insertEnd(head, 1);
+    display(head);
+    
+    //Insert a node with value 2 at end
+    insertEnd(head, 2);
+    display(head);
+    
+    //Insert a node with value 3 at position 1
+    insertAtPosition(head, 3, 1);
+    display(head);
+    
+    //Search for node with value 4 and display the result
+    cout << "Search for value 4: " << (search(head, 4) ? "Found" : "Not Found") << endl;
+    
+    //Update the node at position 2 with value 77
+    updateNode(head, 77, 2);
+    display(head);
+    
+    //insert a node with value 22 at position 3
+    insertNode(head, 22, 3);
+    display(head);
+    
+    //Delete  node from beginning
+    deleteFromBeginning(head);
+    display(head);
+    
+    //Delete a node from end
+    deleteFromEnd(head);
+    display(head);
+    
+    //Delete a node from 5th position
+    deleteFromNthPosition(head, 5);
+    display(head);
+    
+    //search a node with value 2 and update it with 3
+    searchAndUpdate(head, 2, 3);
+    display(head);
+
+    return 0;
+}
